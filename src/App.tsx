@@ -1,12 +1,15 @@
 import './App.css';
 import { BookList, BookSelected } from './components/BookList';
-import { Counter } from './components/Counter';
-import { books } from './data/books';
-import { Book } from './domain/Book';
+import { Book } from './domain/books/Book';
+import { useBooks } from './domain/books/useBooks';
 
 
 function App() {
   
+  const booksUrl = 'http://localhost:4730/books';
+
+  const books = useBooks(booksUrl);
+
   const bookSelected: BookSelected = (book: Book) => {
     alert(book.price)
   };
@@ -14,7 +17,13 @@ function App() {
   
   return (
     <div className="App">
-      <BookList books={books} bookSelected={bookSelected} />    
+      {
+        books ? (
+          <BookList books={books} bookSelected={bookSelected} />
+        ) : (
+          <span>Loading...</span>
+        )
+      }
     </div>
     );
   }

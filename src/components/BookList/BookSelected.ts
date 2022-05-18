@@ -1,4 +1,4 @@
-import { Book } from '../../domain/Book';
+import { Book } from '../../domain/books/Book';
 
 export interface BookSelected {
     (book: Book): void;
