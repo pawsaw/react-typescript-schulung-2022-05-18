@@ -1,17 +1,28 @@
 import { useState, useEffect } from 'react';
 import { Book } from './Book';
 
-export function useBooks(booksUrl: string): Book[] | null {
+export interface UseBooksResult {
+    books: Book[] | null;
+    reload: () => void;
+}
+
+export function useBooks(booksUrl: string): UseBooksResult {
     const [books, setBooks] = useState<Book[] | null>(null);
+
+    async function fetchBooks(_booksUrl: string) {
+        const response = await fetch(_booksUrl);
+        const _books = await response.json();
+        setBooks(_books);
+    }
     
-    useEffect(() => {
-        async function fetchBooks() {
-            const response = await fetch(booksUrl);
-            const _books = await response.json();
-            setBooks(_books);
-        }
-        fetchBooks();
+    useEffect(() => {   
+        fetchBooks(booksUrl);
     }, [booksUrl]);
     
-    return books;
+    return {
+        books,
+        reload: () => {
+            fetchBooks(booksUrl)
+        }
+    }
 }
