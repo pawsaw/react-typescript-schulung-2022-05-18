@@ -13,8 +13,16 @@ export const BookListItem: React.FC<BookListItemsProps> = ({ book, bookSelected 
   }
 
   return (
-    <div onClick={bookClicked}>
-      <Link to={`/books/${book.isbn}`}>{book.title}</Link>
+    <div>
+      <span
+        onClick={bookClicked}
+        style={{
+          color: 'blue',
+          cursor: 'pointer',
+        }}
+      >
+        {book.title}
+      </span>
     </div>
   );
 };
