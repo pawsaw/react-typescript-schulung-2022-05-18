@@ -2,27 +2,27 @@ import { useState, useEffect } from 'react';
 import { Book } from './Book';
 
 export interface UseBooksResult {
-    books: Book[] | null;
-    reload: () => void;
+  books: Book[] | null;
+  reload: () => void;
 }
 
-export function useBooks(booksUrl: string): UseBooksResult {
-    const [books, setBooks] = useState<Book[] | null>(null);
+export function useBooks(): UseBooksResult {
+  const [books, setBooks] = useState<Book[] | null>(null);
 
-    async function fetchBooks(_booksUrl: string) {
-        const response = await fetch(_booksUrl);
-        const _books = await response.json();
-        setBooks(_books);
-    }
-    
-    useEffect(() => {   
-        fetchBooks(booksUrl);
-    }, [booksUrl]);
-    
-    return {
-        books,
-        reload: () => {
-            fetchBooks(booksUrl)
-        }
-    }
+  async function fetchBooks() {
+    const response = await fetch('http://localhost:4730/books');
+    const _books = await response.json();
+    setBooks(_books);
+  }
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
+  return {
+    books,
+    reload: () => {
+      fetchBooks();
+    },
+  };
 }

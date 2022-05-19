@@ -1,34 +1,34 @@
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { BookList, BookSelected } from './components/BookList';
-import { Book } from './domain/books/Book';
-import { useBooks } from './domain/books/useBooks';
-import { noop } from './utils/noop';
-
+import { BookDetailScreen } from './screens/BookDetailScreen';
+import { BookScreen } from './screens/BooksScreen';
+import { PlaygroundScreen } from './screens/PlaygroundScreen';
 
 function App() {
-  
-  const booksUrl = 'http://localhost:4730/books';
-
-  const { books, reload } = useBooks(booksUrl);
-
-  const bookSelected: BookSelected = (book: Book) => {
-    alert(book.price)
-  };
-  
-  
   return (
     <div className="App">
-      {
-        books ? (
-          <BookList books={books} bookSelected={bookSelected} />
-        ) : (
-          <span>Loading...</span>
-        )
-      }
-      <button onClick={reload}>Reload books</button>
+      <ul>
+        <li>
+          <Link to="/books">Books</Link>
+        </li>
+        <li>
+          <Link to="/playground">Playground</Link>
+        </li>
+      </ul>
+      <Switch>
+        <Route path="/books/:isbn">
+          <BookDetailScreen />
+        </Route>
+        <Route path="/books">
+          <BookScreen />
+        </Route>
+        <Route path="/playground">
+          <PlaygroundScreen />
+        </Route>
+        <Redirect to="/books" />
+      </Switch>
     </div>
-    );
-  }
-  
-  export default App;
-  
+  );
+}
+
+export default App;
